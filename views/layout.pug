@@ -1,0 +1,23 @@
+html 
+    head
+       title = pageTitle
+       link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    body 
+        nav 
+            ul 
+                li 
+                    a(href="/") Inicio 
+                if user
+                    li 
+                        a(href = "/alumnos") Alumnos
+                    li 
+                        a(href = "/asignaturas") Asignaturas
+                    li
+                        a(href = "/logout") Cerrar sesión 
+                else
+                    li 
+                        a(href = "/login") Iniciar Sesión 
+        block content 
+
+        footer 
+            p IES Virgen del Carmen (2023)

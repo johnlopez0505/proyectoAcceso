@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+    h1 Lista de Alumnos 
+    table 
+        thread 
+            tr 
+                th ID
+                th Nombre
+                th Apellido
+                th Acciones
+        tbody 
+            each alumno in alumnos 
+            tr
