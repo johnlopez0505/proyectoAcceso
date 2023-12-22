@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO `users`(`username`,`password`)
-    values (`john`,`1234`);
+    values ('john','1234');
 
 CREATE TABLE  `alumno`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,

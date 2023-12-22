@@ -12,3 +12,12 @@ block content
         tbody 
             each alumno in alumnos 
             tr
+                td= alumno.id
+                td= alumno.nombre 
+                td= alumno.apellido 
+                td
+                    a(href=`/alumnos-edit/${alumno.id}`) Editar 
+                    span |
+                    a(href=`/alumno-delete/${alumno.id}`) Eliminar 
+    p 
+        a(href='/alumnos-add') Agregar Nuevo Alumno

@@ -1,11 +1,10 @@
- extend 
+extends layout
 
- block content 
+block content
     h1 Bienvenido, #{user || 'invitado'}
-
-    if user
+    if user 
         p 
-            (href = "/logout") Cerrar sesión 
+            a(href = "/logout") Cerrar sesión 
     else
         p
             a(href = "/login") Iniciar Sesión 
