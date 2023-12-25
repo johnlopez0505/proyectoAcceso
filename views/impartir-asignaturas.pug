@@ -1,0 +1,30 @@
+extends layout
+
+block content
+
+  h1 Gestión de asignaturas
+  
+  h2 Asignar profesores en las Asignaturas
+  
+  form(action="/impartir-asignaturas", method="post")
+    label(for="profesor") Selecciona un profesor:
+        select(name="profesor" id="profesor")
+            each profesor in profesores
+                option(value=profesor.id)= `${profesor.nombre} ${profesor.apellido}`
+    
+    label(for="asignatura") Selecciona una asignatura:
+        select(name="asignatura" id="asignatura")
+            each asignatura in asignaturas
+                option(value=asignatura.id)= asignatura.nombre
+    
+    button(type="submit") Asignar
+
+  hr
+  
+  h2 Maestro detalle: Profesores Asignados a una asignatura
+  
+  label(for="profesorAsignaturas") Selecciona un profesor para ver sus asignaturas Asignadas:
+    select(name="profesorAsignaturas" id="profesorAsignaturas" onchange="location = '/asignaturas-profesor/'+ this.value;")
+     option
+        each profesor in profesores
+            option(value=profesor.id)= `${profesor.nombre} ${profesor.apellido}`

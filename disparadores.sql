@@ -1,3 +1,4 @@
+DELIMITER //
 CREATE TRIGGER before_insert_alumno_asignatura
 BEFORE INSERT ON alumno_asignatura
 FOR EACH ROW

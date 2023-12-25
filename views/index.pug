@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    h1 Bienvenido, #{user || 'invitado'}
+    h1 Bienvenido, #{user || 'Invitado'}
     if user 
         p 
             a(href = "/logout") Cerrar sesión 

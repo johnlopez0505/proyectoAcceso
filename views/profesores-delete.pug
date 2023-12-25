@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1 Eliminar Profesor
+    p ¿Estás seguro de que deseas eliminar al Profesor con el siguiente detalle?
+    ul
+        li Nombre: #{profesor.nombre} 
+        li Apellido: #{profesor.apellido}
+        li Email: #{profesor.email}
+    form(action=`/profesores-delete/${profesor.id}`, method='post')
+        button(type='submit') Eliminar Profesor
+    br
+    a(href='/profesores') Cancelar

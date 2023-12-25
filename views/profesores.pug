@@ -1,0 +1,25 @@
+extends layout 
+
+block content 
+    h1 Lista de Profesores
+    table 
+        thead  
+            tr 
+                th ID
+                th Nombre
+                th Apellido
+                th Email
+                th Acciones
+        tbody 
+            each profesor in profesores 
+                tr
+                    td= profesor.id
+                    td= profesor.nombre 
+                    td= profesor.apellido 
+                    td= profesor.email
+                    td
+                        a(href=`/profesores-edit/${profesor.id}`) Editar 
+                        span |
+                        a(href=`/profesores-delete/${profesor.id}`) Eliminar 
+    p 
+        a(href='/profesores-add') Agregar Nuevo Profesor

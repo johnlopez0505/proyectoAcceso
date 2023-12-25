@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO `users`(`username`,`password`)
-    values ('john','1234');
+    VALUES ('john','1234');
 
 CREATE TABLE  `alumno`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,9 +53,9 @@ CREATE TABLE `asignatura_alumno`(
 
 
 CREATE TABLE `asignatura_profesor`(
-    `asignaturas` INT,
-    `profesores` INT,
-    PRIMARY KEY(asignaturas,profesores),
-    Foreign Key (asignaturas) REFERENCES asignatura(id),
-    Foreign Key (profesores) REFERENCES profesor(id)
+    `asignatura` INT,
+    `profesor` INT,
+    PRIMARY KEY(asignatura,profesor),
+    Foreign Key (asignatura) REFERENCES asignatura(id),
+    Foreign Key (profesor) REFERENCES profesor(id)
 );
