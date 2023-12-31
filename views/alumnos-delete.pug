@@ -1,14 +1,18 @@
 extends layout
 
 block content
-    h1 Eliminar Alumno
-    p ¿Estás seguro de que deseas eliminar al alumno con el siguiente detalle?
-    ul
-        li Nombre: #{alumno.nombre} 
-        li Apellido: #{alumno.apellido}
-        li Email: #{alumno.email}
-        li Telefono: #{alumno.telefono}
-    form(action=`/alumnos-delete/${alumno.id}`, method='post')
-        button(type='submit') Eliminar Alumno
-    br
-    a(href='/alumnos') Cancelar
+    div.container
+        h1(class="text-center") Eliminar Alumno
+        p(class="text-center") ¿Estás seguro de que deseas eliminar al alumno con el siguiente detalle?
+    div.container(style="width: 500px" class="mx-auto")
+        ul(class="list-group" class="border border-success")
+            li(class="list-group-item" style="border-bottom: 1px solid #198754;") Nombre: #{alumno.nombre} 
+            li(class="list-group-item" style="border-bottom: 1px solid #198754") Apellido: #{alumno.apellido}
+            li(class="list-group-item" style="border-bottom: 1px solid #198754;") Email: #{alumno.email}
+            li(class="list-group-item") Telefono: #{alumno.telefono}
+        br
+    div( class="d-grid gap-2 col-2 mx-auto")
+        form(action=`/alumnos-delete/${alumno.id}`, method='post'  class="d-grid gap-2 col-10 mx-auto")
+            button(type='submit' class="btn btn-outline-success") Eliminar Alumno
+        a(href='/alumnos' class="btn btn-outline-success") Cancelar
+        br

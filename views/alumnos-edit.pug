@@ -1,24 +1,31 @@
 extends layout
 
 block content
-    h1 Editar Alumno
-    form(action=`/alumnos-edit/${alumno.id}`, method='post')
-        label(for='nombre') Nombre:
-        input.form-control(type='text', id='nombre', name='nombre', value=
-            alumno.nombre, required=true)
-        br
-        label(for='apellido') Apellido:
-        input.form-control(type='text', id='apellido', name='apellido',
-            value=alumno.apellido, required=true)
-        br
-        label(for='email') Email:
-        input.form-control(type='text', id='email', name='email',
-            value=alumno.email, required=true)
-        br
-        label(for='telefono') Telefono:
-        input.form-control(type='text', id='telefono', name='telefono',
-            value=alumno.telefono, required=true)
-        br
-        button(type='submit') Guardar Cambios
-        br
-    a(href='/alumnos') Volver a la Lista
+    div.container
+        h1(class="text-center") Editar Alumno
+        form(action=`/alumnos-edit/${alumno.id}`, method='post')
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='nombre' class="input-group-text"  style="width: 100px") Nombre:
+                input.form-control(type='text', id='nombre', name='nombre', value=
+                    alumno.nombre, required=true class="border border-success")
+            br
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='apellido' class="input-group-text"  style="width: 100px") Apellido:
+                input.form-control(type='text', id='apellido', name='apellido',
+                    value=alumno.apellido, required=true class="border border-success")
+            br
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='email' class="input-group-text"  style="width: 100px") Email:
+                input.form-control(type='text', id='email', name='email',
+                    value=alumno.email, required=true class="border border-success")
+            br
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='telefono' class="input-group-text"  style="width: 100px") Telefono:
+                input.form-control(type='text', id='telefono', name='telefono',
+                    value=alumno.telefono, required=true class="border border-success")
+            br
+            div(class="d-grid gap-2 col-2 mx-auto")
+                button(type='submit' class="btn btn-outline-success") Guardar Cambios
+        div(class="d-grid gap-2 col-2 mx-auto")
+            a(href='/alumnos' class="btn btn-outline-success") Volver a la Lista
+            br

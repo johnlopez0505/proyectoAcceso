@@ -1,24 +1,34 @@
 extends layout
 
-block content 
-    h1 Lista de Asignaturas 
-    table 
-        thead
-            tr 
-                th Id
-                th Nombre
-                th Ciclo
-                th Curso 
-        tbody 
-            each asignatura in asignaturas 
+block content
+    div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+        h1(class="text-center") Lista de Asignaturas 
+        table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+            thead
                 tr 
-                    td= asignatura.id 
-                    td= asignatura.nombre
-                    td= asignatura.ciclo
-                    td= asignatura.curso
-                    td
-                        a(href=`/asignaturas-edit/${asignatura.id}`) Editar
-                        span | 
-                        a(href=`/asignaturas-delete/${asignatura.id}`) Eliminar 
-    p 
-        a(href=`/asignaturas-add`) Agregar Nueva Asignatura 
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") ID
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Ciclo
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 150px;") Curso
+                    th.bg-success.bg-gradient(class="text-center") Acciones 
+        div(style="overflow-y: auto; max-height: 250px;")
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+                tbody 
+                    each asignatura, index in asignaturas 
+                        tr 
+                            td.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                            td.border-end(style="width: 30px;" class="align-middle text-center")= asignatura.id  
+                            td.border-end(style="width: 250px;" class="align-middle")= asignatura.nombre
+                            td.border-end(style="width: 250px;" class="align-middle")= asignatura.ciclo
+                            td.border-end(style="width: 150px;" class="align-middle")= asignatura.curso
+                            td(class="text-center")
+                                a(href=`/asignaturas-edit/${asignatura.id}` class="btn btn-outline-success") Editar
+                                a.ms-1(href=`/asignaturas-delete/${asignatura.id}` class="btn btn-outline-success") Eliminar 
+        table(class="table table-success table-hover mx-auto" style="width: 100%") 
+            tfoot
+                td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de Asignaturas
+                td.bg-info.bg-gradient(class="text-center")= asignaturas.length
+    div(class="d-grid gap-2 col-2 mx-auto")
+        p(class="mx-auto")  
+            a(href=`/asignaturas-add` class="btn btn-outline-success") Agregar Nueva Asignatura 

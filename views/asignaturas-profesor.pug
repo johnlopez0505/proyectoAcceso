@@ -1,15 +1,20 @@
 extends layout
 
 block content
- h1 Asignaturas Asignadas
- h2 Profesor: #{profesor.nombre} #{profesor.apellido}
- p Email: #{profesor.email}
 
- if asignaturasAsignadas.length > 0
-    ul
-      each asignatura in asignaturasAsignadas
-        li= asignatura.asignatura
- else
-    p El Profesor no está Asignado a ninguna asignatura.
+   div.container
+      h1(class="text-center") Asignaturas Asignadas
+      div(class="container" style="width: 600px; ; margin-top: 20px;" class="mx-auto")
+         h2.mb-0 Profesor: #{profesor.nombre} #{profesor.apellido}
+         p.mb-0 Email: #{profesor.email}
 
- a(href="/asignar-profesores") Volver atrás
+      div(class="container" style="width: 580px; ; margin-top: 20px;" class="mx-auto" )
+         if asignaturasAsignadas.length > 0
+            ul
+               each asignatura in asignaturasAsignadas
+                  li= asignatura.asignatura
+         else
+            p El Profesor no está Asignado a ninguna asignatura.
+      div(class="d-grid gap-2 col-2 mx-auto")
+         a(href="/asignar-profesores" class="btn btn-outline-success") Volver atrás
+      br

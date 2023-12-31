@@ -1,30 +1,73 @@
 extends layout
 
 block content
-
-  h1 Gestión de asignaturas
-  
-  h2 Asignar profesores en las Asignaturas
-  
-  form(action="/impartir-asignaturas", method="post")
-    label(for="profesor") Selecciona un profesor:
-        select(name="profesor" id="profesor")
+  div.container
+    h1(class="text-center") Gestión de asignaturas
+    h2(class="text-center") Asignar profesores en las Asignaturas
+    
+    form(id="asignaturasForm", method="post")
+      div(class="input-group mb-2 " style="width: 950px" class="mx-auto")
+        label(for="profesor") Selecciona un profesor:
+        select.ms-2(name="profesor" id="profesor" class="form-select" class="border border-success")
             each profesor in profesores
                 option(value=profesor.id)= `${profesor.nombre} ${profesor.apellido}`
-    
-    label(for="asignatura") Selecciona una asignatura:
-        select(name="asignatura" id="asignatura")
+        
+        label.ms-2(for="asignatura") Selecciona una asignatura:
+        select.ms-2(name="asignatura" id="asignatura" class="form-select" class="border border-success")
             each asignatura in asignaturas
                 option(value=asignatura.id)= asignatura.nombre
-    
-    button(type="submit") Asignar
+        
+        button.ms-2(type="submit" class="btn btn-outline-success" onclick="submitForm('asignar')") Asignar
+        button.ms-2(type="submit" class="btn btn-outline-success" onclick="submitForm('eliminar')") Eliminar
+    script.
+        function submitForm(action) {
+            // Obtener los valores del formulario
+            const profesor = document.getElementById('profesor').value;
+            const asignatura = document.getElementById('asignatura').value;
 
-  hr
-  
-  h2 Maestro detalle: Profesores Asignados a una asignatura
-  
-  label(for="profesorAsignaturas") Selecciona un profesor para ver sus asignaturas Asignadas:
-    select(name="profesorAsignaturas" id="profesorAsignaturas" onchange="location = '/asignaturas-profesor/'+ this.value;")
-     option
-        each profesor in profesores
-            option(value=profesor.id)= `${profesor.nombre} ${profesor.apellido}`
+            // Establecer la acción del formulario según el botón presionado
+            document.getElementById('asignaturasForm').action = action === 'asignar' ? '/impartir-asignaturas' : '/profesores-asignaturas-delete';
+        }
+    hr
+    div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+        h1(class="text-center") Lista de Asignaturas por profesor
+        table.mb-0(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
+            thead  
+                tr 
+                    th.bg-success.bg-gradient(class="text-center" style="width: 30px; border-right:1px solid black") #
+                    th.bg-success.bg-gradient(class="text-center" style="width: 30px; border-right:1px solid black") ID
+                    th.bg-success.bg-gradient(class="text-center" style="width: 200px; border-right:1px solid black") Nombre Profesor
+                    th.bg-success.bg-gradient(class="text-center" style="width: 300px; border-right:1px solid black") Asignaturas Profesor
+                    th.bg-success.bg-gradient(class="text-center" style="width: 100px;") ID Asignaturas
+            div.mb-0(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")  
+                tbody       
+                    each asignatura, index in asignaturasProfesores
+                        tr
+                            td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                            td.border-end(style="width: 30px;" class="align-middle text-center")= asignatura.id
+                            td.border-end(style="width: 200px;" class="align-middle")= asignatura.nombre
+                            td.border-end(style="width: 300px;" class="align-middle")= asignatura.asignaturas
+                            td.border-end(style="width: 100px;" class="align-middle")= asignatura.idAsignaturas
+            table(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
+                tfoot
+                    each asig in asignaturas
+                        tr
+                            td.bg-success.bg-gradient(style="width: 70%; border-right:1px solid black")= `Cantidad total de profesores asignados en:  ${asig.nombre}`
+                            td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= asignaturasProfesores.filter(profesor => profesor.asignaturas.includes(asig.nombre)).length
+            table(class="table table-success table-hover mx-auto" style="width: 100%")
+                tfoot
+                    tr
+                        td.bg-success.bg-gradient(class="text-center border-end" style="border-bottom: 1px solid #198754;") Cantidad total de profesores con asignaturas
+                        td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= asignaturasProfesores.length
+                            
+    hr
+    
+    h2(class="text-center") Maestro detalle: Profesores Asignados a una asignatura
+    div(class="input-group mb-2 " style="width: 700px" class="mx-auto")
+      label(for="profesorAsignaturas") Selecciona un profesor para ver sus asignaturas Asignadas:
+      select.ms-2(name="profesorAsignaturas" id="profesorAsignaturas" class="form-select" class="border border-success" style="width: 50px"  onchange="location = '/asignaturas-profesor/'+ this.value;")
+          option
+          each profesor in profesores
+              option(value=profesor.id)= `${profesor.nombre} ${profesor.apellido}`
+    br

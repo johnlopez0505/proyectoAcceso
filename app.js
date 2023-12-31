@@ -15,6 +15,9 @@ const db = mysql.createConnection({
     database: `gestion`,
 })
 
+const util = require('util');
+const queryAsync = util.promisify(db.query).bind(db);
+
 db.connect(err => {
     if(err){
         console.error(`Error al conectar a mysql:`,err);
@@ -23,6 +26,14 @@ db.connect(err => {
     console.log(`Conexión exitosa a MySQL`);
 });
 
+
+
+//configurar pug
+app.set('view engine','pug');
+app.set('views', path.join(__dirname, 'views'));
+
+//Middleware para analizar el cuerpo de las solicitudes
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(
     session({
@@ -34,18 +45,6 @@ app.use(
     })
 );
 
-//configurar pug
-app.set('view engine','pug');
-app.set('views', path.join(__dirname, 'views'));
-
-//Middleware para analizar el cuerpo de las solicitudes
-app.use(bodyParser.urlencoded({extended: true}));
-
-//ruta por defecto
-app.get('/', (req, res) => {
-    res.render('index',{user: req.session.user});
-});
-
 //Middleware para gestionar la sesión de usuario
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
@@ -55,6 +54,14 @@ app.use((req, res, next) => {
     }
 
     next();
+});
+
+
+
+
+//ruta por defecto
+app.get('/', (req, res) => {
+    res.render('index',{user: req.session.user});
 });
 
 
@@ -69,25 +76,24 @@ app.get('/login',(req, res)=> {
     res.render('login');
 });
 
+// Ruta para manejar el formulario de login
 app.post('/login', (req,res) => {
-    const { username, password } = req.body;
-    console.log(username);
-    console.log(password);
+    const { username, password} = req.body;
 
-     // verificar credenciales
-     const query = "SELECT * FROM users WHERE username = ? AND password = ?";
-     db.query(query, [username, password],(err,results) => {
-         if(err){
-             console.error('Error al verificar las credenciales:', err);
-             res.render("error", {mensaje: "Credenciales no validas."});
-         }else{
-             if(results.length > 0){
-                 req.session.user = username;
-                 res.redirect('/');
-             }else{
-                 res.redirect('/login');
-             }
-         }
+    // verificar credenciales
+    const query = "SELECT * FROM users WHERE username = ? AND password = ? ";
+    db.query(query, [username, password],(err,results) => {
+        if(err){
+            console.error('Error al verificar las credenciales:', err);
+            res.render("error", {mensaje: "Credenciales no validas."});
+        }else{
+            if(results.length > 0){
+                req.session.user =  username;
+                res.redirect('/');
+            }else{
+                res.redirect('/login');
+            }
+        }
      });
  })
 
@@ -102,14 +108,6 @@ app.get('/error', (req, res) => {
     res.render('error');
 });
 
-//rutas
-app.use((req,res, next)=> {
-    res.locals.user = req.session.user || null;
-    if(req.session.user === undefined && !req.path.startsWith("/login"))
-        res.redirect("/login");
-    else
-        next();
-});
 
 
     
@@ -118,7 +116,7 @@ app.use((req,res, next)=> {
 //findAll alumnos
 app.get('/alumnos', (req, res) => {
     // Obtener todos los alumnos de la base de datos
-    db.query('SELECT * FROM alumno', (err, result) => {
+    db.query('SELECT * FROM alumno ORDER BY nombre', (err, result) => {
         if (err) res.render("error", {mensaje: err});
         else res.render('alumnos', { alumnos: result });
     });
@@ -191,7 +189,7 @@ app.post('/alumnos-delete/:id', (req, res) => {
 //crud asignaturas 
 
 app.get('/asignaturas', (req, res)=> {
-    db.query('SELECT * FROM asignatura', (err, result) => {
+    db.query('SELECT * FROM asignatura ORDER BY nombre', (err, result) => {
         if (err)
             res.render("error", {mensaje: err});
         else {
@@ -262,19 +260,32 @@ app.post('/asignaturas-delete/:id', (req, res) => {
 });
     
    
-// Rutas maestro detalles
+// detalle maestro matriculas
 app.get('/matricular', (req, res) => {
     // Obtener lista de alumnos y asignaturas
-    const queryAlumnos = 'SELECT * FROM alumno';
-    const queryAsignaturas = 'SELECT * FROM asignatura';
+    const queryAlumnos = ' SELECT * FROM alumno ORDER BY nombre';
+    const queryAsignaturas = 'SELECT * FROM asignatura ORDER BY nombre';
+    const queryAsigAlumnos = `
+    SELECT a.id as id,
+    CONCAT(a.nombre, ' ', a.apellido) AS nombre, 
+    GROUP_CONCAT(asig.nombre SEPARATOR ', ') AS asignaturas,
+    GROUP_CONCAT(asig.id SEPARATOR ', ') AS idAsignaturas 
+    FROM asignatura_alumno al 
+    JOIN alumno a ON al.alumno = a.id 
+    JOIN asignatura asig ON al.asignatura = asig.id 
+    GROUP BY nombre, id`
     
     db.query(queryAlumnos, (errAlumnos, resultAlumnos) => {
         if (errAlumnos) throw errAlumnos;
-            db.query(queryAsignaturas, (errAsignaturas, resultAsignaturas) => {
-                if (errAsignaturas) throw errAsignaturas;
-                    res.render('matriculas', {
-                    alumnos: resultAlumnos,
-                    asignaturas: resultAsignaturas,
+            db.query(queryAsigAlumnos, (errAsigAlumnos, resultAsigAlumnos) => {
+                if (errAsigAlumnos) throw errAsigAlumnos;
+                db.query(queryAsignaturas, (errAsignaturas, resultAsignaturas) => {
+                    if (errAsignaturas) throw errAsignaturas;
+                        res.render('matriculas', {
+                        alumnos: resultAlumnos,
+                        asignaturas: resultAsignaturas,
+                        matriculados: resultAsigAlumnos,
+                })
             });
         });
     });
@@ -282,28 +293,44 @@ app.get('/matricular', (req, res) => {
 
 
 
-app.post('/matricular', (req, res) => {
+app.post('/matricular', async (req, res) => {
     const { alumno, asignatura } = req.body;
-    // Verificar si la matrícula ya existe
+
+    // Verificar si la matricula ya existe
     const queryExistencia = 'SELECT * FROM asignatura_alumno WHERE alumno = ? AND asignatura = ?';
-    db.query(queryExistencia, [alumno, asignatura], (errExistencia,resultExistencia) => {
-        if (errExistencia) throw errExistencia;
-            if (resultExistencia.length === 0) {
-                // Matricular al alumno en la asignatura
-                const queryMatricular = 'INSERT INTO asignatura_alumno (alumno,asignatura) VALUES (?, ?)';
-                db.query(queryMatricular, [alumno, asignatura], (errMatricular)=> {
-                    if (errMatricular) throw errMatricular;
-                        res.redirect('/matricular');
-                });
+
+    try {
+        const resultExistencia = await queryAsync(queryExistencia, [alumno, asignatura]);
+
+        if (resultExistencia.length === 0) {
+            // Matricular al alumno en la asignatura
+            const queryMatricular = 'INSERT INTO asignatura_alumno (alumno, asignatura) VALUES (?, ?)';
+            
+            try {
+                await queryAsync(queryMatricular, [alumno, asignatura]);
+                // Éxito en la matricula
+                res.redirect('/matricular');
+            } catch (errMatricular) {
+                // Ignorar el error específico que esperamos
+                if (!(errMatricular.sqlState === '45000' && errMatricular.errno === 1644)) {
+                    // Otro tipo de error, lanzar para que se maneje en el bloque catch superior
+                    throw errMatricular;
+                }
+                // Error específico: No se pueden matricular más de 32 alumnos a la asignatura
+                console.error('Error: No se pueden matricular más de 32 Alumnos a la Asignatura.');
+                res.render('error', { mensaje: 'No se pueden matricular más de 32 Alumnos a la Asignatura.' });
+            }
         } else {
-            // Matrícula ya existe
-            res.render('error', {mensaje: 'La matrícula ya existe'});
+            // Asignación ya existe
+            res.render('error', { mensaje: 'La Asignación ya existe' });
         }
-    });
+    } catch (errExistencia) {
+        // Error al verificar la existencia
+        res.render('error', { mensaje: 'Error al verificar la existencia.' });
+    }
 });
 
-
-app.get('/asignaturas/:alumnoId', (req, res) => {
+app.get('/asignaturas-alumno/:alumnoId', (req, res) => {
     const alumnoId = req.params.alumnoId;
     // Obtener asignaturas matriculadas para el alumno seleccionado
     const queryAsignaturasMatriculadas = `
@@ -327,12 +354,27 @@ app.get('/asignaturas/:alumnoId', (req, res) => {
     });
 });
 
+app.post('/matricula-delete', (req, res) => {
+    const { alumno, asignatura } = req.body;
+    
+    // Eliminar un profesor por su ID
+    db.query(`DELETE FROM asignatura_alumno 
+    WHERE alumno = ? AND asignatura = ?`
+    , [alumno,asignatura], (err,
+        result) => {
+    if (err)
+        res.render("error", {mensaje: err});
+    else
+        res.redirect('/matricular');
+    });
+});
+
 
 //crup profesor
 //findAll profesores
 app.get('/profesores', (req, res) => {
     // Obtener todos los profesores de la base de datos
-    db.query('SELECT * FROM profesor', (err, result) => {
+    db.query('SELECT * FROM profesor ORDER BY nombre', (err, result) => {
         if (err) res.render("error", {mensaje: err});
         else res.render('profesores', { profesores: result });
     });
@@ -407,41 +449,70 @@ app.post('/profesores-delete/:id', (req, res) => {
 // Rutas maestro asignar profesores
 app.get('/asignar-profesores', (req, res) => {
     // Obtener lista de profesores y asignaturas
-    const queryProfesores = 'SELECT * FROM profesor';
-    const queryAsignaturas = 'SELECT * FROM asignatura';
+    const queryProfesores = 'SELECT * FROM profesor ORDER BY nombre';
+    const queryAsignaturas = 'SELECT * FROM asignatura ORDER BY nombre';
+    const queryAsignaturasProfesores = `
+    SELECT p.id as id,
+    CONCAT(p.nombre, ' ', p.apellido) AS nombre, 
+    GROUP_CONCAT(asig.nombre SEPARATOR ', ') AS asignaturas,
+    GROUP_CONCAT(asig.id SEPARATOR ', ') AS idAsignaturas 
+    FROM asignatura_profesor ap 
+    JOIN profesor p ON ap.profesor = p.id 
+    JOIN asignatura asig ON ap.asignatura = asig.id 
+    GROUP BY nombre, id;`;
     
     db.query(queryProfesores, (errProfesores, resultProfesores) => {
         if (errProfesores) throw errProfesores;
-            db.query(queryAsignaturas, (errAsignaturas, resultAsignaturas) => {
-                if (errAsignaturas) throw errAsignaturas;
-                    res.render('impartir-asignaturas', {
-                    profesores: resultProfesores,
-                    asignaturas: resultAsignaturas,
+            db.query(queryAsignaturasProfesores, (errAsignaturaProfesores, resultAsignaturaProfesor) =>{
+                if (errAsignaturaProfesores) throw errAsignaturaProfesores;
+                db.query(queryAsignaturas, (errAsignaturas, resultAsignaturas) => {
+                    if (errAsignaturas) throw errAsignaturas;
+                        res.render('impartir-asignaturas', {
+                        profesores: resultProfesores,
+                        asignaturas: resultAsignaturas,
+                        asignaturasProfesores: resultAsignaturaProfesor,
+                });
             });
         });
     });
 });
 
 
-
-app.post('/impartir-asignaturas', (req, res) => {
+app.post('/impartir-asignaturas', async (req, res) => {
     const { profesor, asignatura } = req.body;
-    // Verificar si la asignacion ya existe
+
+    // Verificar si la asignación ya existe
     const queryExistencia = 'SELECT * FROM asignatura_profesor WHERE profesor = ? AND asignatura = ?';
-    db.query(queryExistencia, [profesor, asignatura], (errExistencia,resultExistencia) => {
-        if (errExistencia) throw errExistencia;
-            if (resultExistencia.length === 0) {
-                // Asignar al profesor en la asignatura
-                const queryAsignar = 'INSERT INTO asignatura_profesor (profesor,asignatura) VALUES (?, ?)';
-                db.query(queryAsignar, [profesor, asignatura], (errAsignaturas)=> {
-                    if (errAsignaturas) throw errAsignaturas;
-                        res.redirect('/asignar-profesores');
-                });
+
+    try {
+        const resultExistencia = await queryAsync(queryExistencia, [profesor, asignatura]);
+
+        if (resultExistencia.length === 0) {
+            // Asignar al profesor en la asignatura
+            const queryAsignar = 'INSERT INTO asignatura_profesor (profesor, asignatura) VALUES (?, ?)';
+            
+            try {
+                await queryAsync(queryAsignar, [profesor, asignatura]);
+                // Éxito en la asignación
+                res.redirect('/asignar-profesores');
+            } catch (errAsignaturas) {
+                // Ignorar el error específico que esperamos
+                if (!(errAsignaturas.sqlState === '45000' && errAsignaturas.errno === 1644)) {
+                    // Otro tipo de error, lanzar para que se maneje en el bloque catch superior
+                    throw errAsignaturas;
+                }
+                // Error específico: No se pueden asignar más de dos profesores a la asignatura
+                console.error('Error: No se pueden asignar más de dos profesores a la asignatura.');
+                res.render('error', { mensaje: 'No se pueden asignar más de dos profesores a la asignatura.' });
+            }
         } else {
-            // Asignacion ya existe
-            res.render('error', {mensaje: 'La Asignacion ya existe'});
+            // Asignación ya existe
+            res.render('error', { mensaje: 'La Asignación ya existe' });
         }
-    });
+    } catch (errExistencia) {
+        // Error al verificar la existencia
+        res.render('error', { mensaje: 'Error al verificar la existencia.' });
+    }
 });
 
 
@@ -466,6 +537,21 @@ app.get('/asignaturas-profesor/:profesorId', (req, res) => {
                     asignaturasAsignadas: asignaturas});
             });
         }
+    });
+});
+
+app.post('/profesores-asignaturas-delete', (req, res) => {
+    const { profesor, asignatura } = req.body;
+    
+    // Eliminar un profesor por su ID
+    db.query(`DELETE FROM asignatura_profesor 
+    WHERE profesor = ? AND asignatura = ?`
+    , [profesor,asignatura], (err,
+        result) => {
+    if (err)
+        res.render("error", {mensaje: err});
+    else
+        res.redirect('/asignar-profesores');
     });
 });
 

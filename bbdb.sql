@@ -5,18 +5,11 @@ USE `gestion`;
 DROP TABLE IF EXISTS `asignatura_profesor`;
 DROP TABLE IF EXISTS `asignatura_alumno`;
 DROP TABLE IF EXISTS `asignatura`;
+DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `profesor`;
 DROP TABLE IF EXISTS `alumno`;
 
 
-CREATE TABLE IF NOT EXISTS users (
-`id` INT AUTO_INCREMENT PRIMARY KEY,
-`username` VARCHAR(255) NOT NULL,
-`password` VARCHAR(255) NOT NULL
-);
-
-INSERT INTO `users`(`username`,`password`)
-    VALUES ('john','1234');
 
 CREATE TABLE  `alumno`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,6 +26,23 @@ CREATE TABLE `profesor`(
     `apellido` VARCHAR(20) NOT NULL,
     `email` VARCHAR(30) NOT null
 );
+
+
+CREATE TABLE IF NOT EXISTS users (
+`id` INT AUTO_INCREMENT PRIMARY KEY,
+`username` VARCHAR(255) NOT NULL,
+`password` VARCHAR(255) NOT NULL,
+`rol` ENUM('administrativo', 'profesor', 'alumno') NOT NULL,
+`profesor` INT,
+`alumno` INT,
+FOREIGN KEY (profesor) REFERENCES profesor (id),
+FOREIGN KEY (alumno) REFERENCES alumno (id)
+);
+
+    
+
+INSERT INTO `users`(`username`,`password`)
+    VALUES ('john','1234');
 
 
 CREATE TABLE `asignatura`(

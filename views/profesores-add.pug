@@ -1,18 +1,22 @@
 extends layout
 
 block content
-    h1 Agregar Profesor
-    form(action='/profesores-add', method='post')
-        label(for='nombre') Nombre:
-        input(type='text', id='nombre', name='nombre', required=true)
-        br
-        label(for='apellido') Apellido:
-        input(type='text', id='apellido', name='apellido', required=true)
-        br
-        label(for='email') Email:
-        input(type='text', id='email', name='email', required=true)
-        br
-        
-        button(type='submit') Agregar Profesor
-    br
-    a(href='/profesores') Volver a la Lista
+    div.container
+        h1(class="text-center") Agregar Profesor
+        form(action='/profesores-add', method='post')
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='nombre' class="input-group-text"  style="width: 100px") Nombre:
+                input.form-control(type='text', id='nombre', name='nombre', required=true class="border border-success border border-success")
+            br
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='apellido' class="input-group-text"  style="width: 100px") Apellido:
+                input.form-control(type='text', id='apellido', name='apellido', required=true class="border border-success")
+            br
+            div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+                label.bg-success.bg-gradient(for='email' class="input-group-text"  style="width: 100px") Email:
+                input.form-control(type='text', id='email', name='email', required=true class="border border-success")
+            br
+            div(class="d-grid gap-2 col-2 mx-auto")
+                button(type='submit' class="btn btn-outline-success") Agregar Profesor
+        div(class="d-grid gap-2 col-2 mx-auto")
+            a(href='/profesores' class="btn btn-outline-success") Volver a la Lista

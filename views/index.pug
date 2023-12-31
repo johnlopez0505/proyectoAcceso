@@ -1,13 +1,14 @@
 extends layout
 
 block content
-    h1 Bienvenido, #{user || 'Invitado'}
-    if user 
-        p 
-            a(href = "/logout") Cerrar sesión 
-    else
-        p
-            a(href = "/login") Iniciar Sesión 
+    div.container
+        h1(class="text-center") Bienvenido, #{user || 'Invitado'}
+        if user 
+            p(class="d-grid gap-2 col-2 mx-auto") 
+                a(href = "/logout" class="btn btn-outline-success") Cerrar sesión 
+        else
+            p(class="d-grid gap-2 col-2 mx-auto")
+                a(href = "/login" class="btn btn-outline-success") Iniciar Sesión 
 
         
     

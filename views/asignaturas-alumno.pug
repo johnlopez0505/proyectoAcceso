@@ -1,16 +1,20 @@
 extends layout
 
 block content
- h1 Asignaturas Matriculadas
- h2 Alumno: #{alumno.nombre} #{alumno.apellido}
- p Teléfono: #{alumno.telefono}
- p Email: #{alumno.email}
+   div.cobtainer
+      h1(class="text-center") Asignaturas Matriculadas
+      div(class="container" style="width: 600px; ; margin-top: 20px;" class="mx-auto")
+         h2.mb-0  Alumno: #{alumno.nombre} #{alumno.apellido}
+         p.mb-0 Teléfono: #{alumno.telefono}
+         p.mb-0 Email: #{alumno.email}
 
- if asignaturasMatriculadas.length > 0
-    ul
-      each asignatura in asignaturasMatriculadas
-        li= asignatura.asignatura
- else
-    p El alumno no está matriculado en ninguna asignatura.
-
- a(href="/matricular") Volver atrás
+      div(class="container" style="width: 580px; ; margin-top: 20px;" class="mx-auto" )
+         if asignaturasMatriculadas.length > 0
+            ul
+               each asignatura in asignaturasMatriculadas
+                  li= asignatura.asignatura
+         else
+            p El alumno no está matriculado en ninguna asignatura.
+      div(class="d-grid gap-2 col-2 mx-auto")
+         a(href="/matricular" class="btn btn-outline-success") Volver atrás
+      br

@@ -1,19 +1,17 @@
 extends layout
 
 block content
-
- h1 Eliminar Asignatura
-
- p ¿Estás seguro de que deseas eliminar la asignatura con el
-    siguiente detalle?
-
- ul
-    li Nombre: #{asignatura.nombre}
-    li Ciclo: #{asignatura.ciclo}
-    li Curso: #{asignatura.curso}
-
- form(action=`/asignaturas-delete/${asignatura.id}`, method='post')
-    button(type='submit') Eliminar Asignatura
- br
-
- a(href='/asignaturas') Cancelar
+   div.container
+      h1(class="text-center") Eliminar Asignatura
+      p(class="text-center") ¿Estás seguro de que deseas eliminar la asignatura con el siguiente detalle?
+   div.container(style="width: 500px" class="mx-auto")
+      ul(class="list-group" class="border border-success")
+         li(class="list-group-item" style="border-bottom: 1px solid #198754;") Nombre: #{asignatura.nombre}
+         li(class="list-group-item" style="border-bottom: 1px solid #198754;") Ciclo: #{asignatura.ciclo}
+         li(class="list-group-item") Curso: #{asignatura.curso}
+      br
+   div( class="d-grid gap-2 col-2 mx-auto")
+      form(action=`/asignaturas-delete/${asignatura.id}`, method='post' class="d-grid gap-2 col-10 mx-auto")
+         button(type='submit' class="btn btn-outline-success") Eliminar Asignatura
+      a(href='/asignaturas' class="btn btn-outline-success") Cancelar
+      br

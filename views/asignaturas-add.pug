@@ -1,18 +1,23 @@
 extends layout
 
 block content
- h1 Agregar Asignatura
- form(action='/asignaturas-add', method='post')
-    label(for='nombre') Nombre:
-    input(type='text', id='nombre', name='nombre', required=true)
-    
-    label(for='curso') Curso:
-    input(type='text', id='curso', name='curso', required=true)
-    
-    label(for='ciclo') Ciclo:
-    input(type='text', id='ciclo', name='ciclo', required=true)
-    
-    br
-    button(type='submit') Agregar Asignatura
-    br
-    a(href='/asignaturas') Volver a la Lista
+   div.container
+      h1(class="text-center") Agregar Asignatura
+      form(action='/asignaturas-add', method='post')
+         div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+            label.bg-success.bg-gradient(for='nombre' class="input-group-text"  style="width: 100px") Nombre:
+            input.form-control(type='text', id='nombre', name='nombre', required=true class="border border-success")
+         br
+         div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+            label.bg-success.bg-gradient(for='curso' class="input-group-text"  style="width: 100px") Curso:
+            input.form-control(type='text', id='curso', name='curso', required=true class="border border-success")
+         br
+         div(class="input-group mb-2 " style="width: 500px" class="mx-auto")  
+            label.bg-success.bg-gradient(for='ciclo' class="input-group-text"  style="width: 100px") Ciclo:
+            input.form-control(type='text', id='ciclo', name='ciclo', required=true class="border border-success")
+         br
+         div(class="d-grid gap-2 col-2 mx-auto")
+            button(type='submit' class="btn btn-outline-success") Agregar Asignatura
+      div(class="d-grid gap-2 col-2 mx-auto")
+            a(href='/asignaturas' class="btn btn-outline-success") Volver a la Lista
+            br

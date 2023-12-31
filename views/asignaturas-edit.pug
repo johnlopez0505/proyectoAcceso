@@ -1,23 +1,26 @@
 extends layout
 
 block content
-
- h1 Editar Asignatura
-
- form(action=`/asignaturas-edit/${asignatura.id}`, method='post')
-    br
-    label(for='nombre') Nombre:
-    input.form-control(type='text', id='nombre', name='nombre', value=
-    asignatura.nombre, required=true)
-    br
-    label(for='curso') Curso:
-    input.form-control(type='text', id='curso', name='curso', value=
-    asignatura.curso, required=true)
-    br
-    label(for='curso') Ciclo:
-    input.form-control(type='text', id='ciclo', name='ciclo', value=
-    asignatura.ciclo, required=true)
-    br
-    button.btn.btn-primary(type='submit') Guardar Cambios
-    br
-    a(href='/asignaturas') Volver a la Lista
+   div.container
+   h1(class="text-center") Editar Asignatura
+   form(action=`/asignaturas-edit/${asignatura.id}`, method='post')
+      div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+         label.bg-success.bg-gradient(for='nombre' class="input-group-text"  style="width: 100px") Nombre:
+         input.form-control(type='text', id='nombre', name='nombre', value=
+         asignatura.nombre, required=true class="border border-success")
+      br
+      div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+         label.bg-success.bg-gradient(for='curso' class="input-group-text"  style="width: 100px") Curso:
+         input.form-control(type='text', id='curso', name='curso', value=
+         asignatura.curso, required=true class="border border-success")
+      br
+      div(class="input-group mb-2 " style="width: 500px" class="mx-auto")
+         label.bg-success.bg-gradient(for='curso' class="input-group-text"  style="width: 100px") Ciclo:
+         input.form-control(type='text', id='ciclo', name='ciclo', value=
+         asignatura.ciclo, required=true class="border border-success")
+      br
+      div(class="d-grid gap-2 col-2 mx-auto")
+         button(type='submit' class="btn btn-outline-success") Guardar Cambios
+   div(class="d-grid gap-2 col-2 mx-auto")
+         a(href='/asignaturas' class="btn btn-outline-success") Volver a la Lista
+         br

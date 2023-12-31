@@ -1,30 +1,78 @@
 extends layout
 
 block content
+  div.container
+    h1(class="text-center") Gestión de asignaturas 
+    h2(class="text-center") Matricular Alumnos en Asignaturas
+    form(id="matriculaForm", method="post")
+      div(class="input-group mb-2 " style="width: 900px" class="mx-auto")
+        label(for="alumno") Selecciona un alumno:
+        select.ms-2(name="alumno" id="alumno" class="form-select" class="border border-success")
+                each alumno in alumnos
+                    option(value=alumno.id)= `${alumno.nombre} ${alumno.apellido}`
+        label.ms-2(for="asignatura") Selecciona una asignatura:
+        select.ms-2(name="asignatura" id="asignatura" class="form-select border border-success")
+                each asignatura in asignaturas
+                    option(value=asignatura.id)= asignatura.nombre
+        
+        button.ms-2(type="submit" class="btn btn-outline-success" onclick="submitForm('matricular')") Matricular
+        button.ms-2(type="submit" class="btn btn-outline-success" onclick="submitForm('eliminar')") Eliminar
+    hr(style="border: 3px solid #198754;")
+    script.
+      function submitForm(action) {
+          // Obtener los valores del formulario
+          const profesor = document.getElementById('alumno').value;
+          const asignatura = document.getElementById('asignatura').value;
+          // Establecer la acción del formulario según el botón presionado
+          document.getElementById('matriculaForm').action = action === 'matricular' ? '/matricular' : '/matricula-delete';
+      }
+    div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+        h1(class="text-center") Lista de Alumnos Matriculados
+        table.mb-0(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
+            thead  
+                tr 
+                    th.bg-success.bg-gradient(class="text-center" style="width: 30px; border-right:1px solid black") #
+                    th.bg-success.bg-gradient(class="text-center" style="width: 30px; border-right:1px solid black") ID
+                    th.bg-success.bg-gradient(class="text-center" style="width: 200px; border-right:1px solid black") Nombre Alumnos
+                    th.bg-success.bg-gradient(class="text-center" style="width: 300px; border-right:1px solid black") Asignaturas Alumnos
+                    th.bg-success.bg-gradient(class="text-center" style="width: 100px;") ID Asignaturas
+                    
+        div.mb-0(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
+          table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")  
+              tbody    
+                  each matricula, index in matriculados
+                      tr
+                          td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                          td.border-end(style="width: 30px;" class="align-middle text-center")= matricula.id
+                          td.border-end(style="width: 200px;" class="align-middle")= matricula.nombre
+                          td.border-end(style="width: 300px;" class="align-middle")= matricula.asignaturas
+                          td.border-end(style="width: 100px;" class="align-middle")= matricula.idAsignaturas
+       
+        table(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
+          tfoot
+            each asig in asignaturas
+              tr
+                td.bg-success.bg-gradient(style="width: 70%; border-right:1px solid black")= `Cantidad total de alumnos matriculados en:  ${asig.nombre}`
+                td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= matriculados.filter(alumno => alumno.asignaturas.includes(asig.nombre)).length
+        table(class="table table-success table-hover mx-auto" style="width: 100%")
+          tfoot
+            tr
+                td.bg-success.bg-gradient(class="text-center border-end" style="border-bottom: 1px solid #198754;") Cantidad total de alumnos matriculados
+                td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= matriculados.length
+    hr(style="border: 3px solid #198754;")
 
-  h1 Gestión de asignaturas
-  
-  h2 Matricular Alumnos en Asignaturas
-  
-  form(action="/matricular", method="post")
-    label(for="alumno") Selecciona un alumno:
-        select(name="alumno" id="alumno")
-            each alumno in alumnos
-                option(value=alumno.id)= `${alumno.nombre} ${alumno.apellido}`
-    
-    label(for="asignatura") Selecciona una asignatura:
-        select(name="asignatura" id="asignatura")
-            each asignatura in asignaturas
-                option(value=asignatura.id)= asignatura.nombre
-    
-    button(type="submit") Matricular
+    h2(class="text-center") Maestro detalle: Alumnos matriculados de una asignatura
+    div(class="input-group mb-2 mx-auto" style="width: 700px" )
+      label(for="alumnoAsignaturas") Selecciona un alumno para ver sus asignaturas matriculadas:
+      select.ms-2(name="alumnoAsignaturas" id="alumnoAsignaturas" class="form-select border border-success" 
+        style="width: 50px" onchange="location='/asignaturas-alumno/' + this.value;")
+              option
+              each alumno in alumnos
+                  option(value=alumno.id)= `${alumno.nombre} ${alumno.apellido}`
+    br
+      
 
-  hr
-  
-  h2 Maestro detalle: Alumnos matriculados de una asignatura
-  
-  label(for="alumnoAsignaturas") Selecciona un alumno para ver sus asignaturas matriculadas:
-    select(name="alumnoAsignaturas" id="alumnoAsignaturas" onchange="location = '/asignaturas/'+ this.value;")
-     option
-        each alumno in alumnos
-            option(value=alumno.id)= `${alumno.nombre} ${alumno.apellido}`
+   
+     
+
+    

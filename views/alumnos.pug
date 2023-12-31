@@ -1,27 +1,35 @@
 extends layout 
 
-block content 
-    h1 Lista de Alumnos 
-    table 
-        thead  
-            tr 
-                th ID
-                th Nombre
-                th Apellido
-                th Email
-                th Teléfono  
-                th Acciones
-        tbody 
-            each alumno in alumnos 
+block content
+    div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+        h1(class="text-center") Lista de Alumnos 
+        table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+            thead  
                 tr
-                    td= alumno.id
-                    td= alumno.nombre 
-                    td= alumno.apellido 
-                    td= alumno.email  
-                    td= alumno.telefono  
-                    td
-                        a(href=`/alumnos-edit/${alumno.id}`) Editar 
-                        span |
-                        a(href=`/alumnos-delete/${alumno.id}`) Eliminar 
-    p 
-        a(href='/alumnos-add') Agregar Nuevo Alumno
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") ID
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
+                    th.bg-success.bg-gradient(class="text-center border-end " style="width: 300px;") Email
+                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 100px;") Teléfono  
+                    th.bg-success.bg-gradient(class="text-center") Acciones
+        div(style="overflow-y: auto; max-height: 250px;")
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+                tbody 
+                    each alumno, index in alumnos 
+                        tr
+                            td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1 
+                            td.border-end(style="width: 30px;" class="align-middle text-center")= alumno.id
+                            td.border-end(style="width: 250px;" class="align-middle")= `${alumno.nombre} ${alumno.apellido}` 
+                            td.border-end(style="width: 300px;" class="align-middle")= alumno.email  
+                            td.border-end(style="width: 100px;" class="align-middle")= alumno.telefono  
+                            td(class="text-center")
+                                a(href=`/alumnos-edit/${alumno.id}` class="btn btn-outline-success") Editar 
+                                a.ms-1(href=`/alumnos-delete/${alumno.id}` class="btn btn-outline-success") Eliminar 
+        table(class="table table-success table-hover mx-auto" style="width: 100%") 
+            tfoot
+                td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de alumnos
+                td.bg-info.bg-gradient(class="text-center")= alumnos.length
+    div(class="d-grid gap-2 col-2 mx-auto" style="margin-top: 30px;")
+        p(class="mx-auto") 
+            a(href='/alumnos-add' class="btn btn-outline-success") Agregar Nuevo Alumno
+            br
