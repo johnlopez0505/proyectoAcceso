@@ -39,7 +39,7 @@ block content
                     th.bg-success.bg-gradient(class="text-center" style="width: 200px; border-right:1px solid black") Nombre Profesor
                     th.bg-success.bg-gradient(class="text-center" style="width: 300px; border-right:1px solid black") Asignaturas Profesor
                     th.bg-success.bg-gradient(class="text-center" style="width: 100px;") ID Asignaturas
-            div.mb-0(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
+        div.mb-0(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
             table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")  
                 tbody       
                     each asignatura, index in asignaturasProfesores
@@ -49,17 +49,24 @@ block content
                             td.border-end(style="width: 200px;" class="align-middle")= asignatura.nombre
                             td.border-end(style="width: 300px;" class="align-middle")= asignatura.asignaturas
                             td.border-end(style="width: 100px;" class="align-middle")= asignatura.idAsignaturas
-            table(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
-                tfoot
-                    each asig in asignaturas
-                        tr
-                            td.bg-success.bg-gradient(style="width: 70%; border-right:1px solid black")= `Cantidad total de profesores asignados en:  ${asig.nombre}`
-                            td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= asignaturasProfesores.filter(profesor => profesor.asignaturas.includes(asig.nombre)).length
-            table(class="table table-success table-hover mx-auto" style="width: 100%")
-                tfoot
+        table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")  
+          tfoot 
+            tr 
+              td.bg-success.bg-gradient
+        div.mb-2(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
+          table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
+            tfoot
+                each asig in asignaturas
                     tr
-                        td.bg-success.bg-gradient(class="text-center border-end" style="border-bottom: 1px solid #198754;") Cantidad total de profesores con asignaturas
-                        td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= asignaturasProfesores.length
+                        td.bg-success.bg-gradient(style="width: 70%; border-right:1px solid black")= `Cantidad total de profesores asignados en:  ${asig.nombre}`
+                        td(class="text-center" style="background-color: #E0F7FA;")= asignaturasProfesores.filter(profesor => profesor.asignaturas.includes(asig.nombre)).length
+        table(class="table table-success table-hover mx-auto" style="width: 100%")
+            tfoot
+                tr
+                    td.bg-success.bg-gradient(class="text-center border-end" 
+                        style="border-bottom: 1px solid #198754;") Cantidad total de profesores con asignaturas
+                    td(class="text-center" 
+                        style="background-color: #E0F7FA;")= asignaturasProfesores.length
                             
     hr
     

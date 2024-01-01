@@ -47,18 +47,22 @@ block content
                           td.border-end(style="width: 200px;" class="align-middle")= matricula.nombre
                           td.border-end(style="width: 300px;" class="align-middle")= matricula.asignaturas
                           td.border-end(style="width: 100px;" class="align-middle")= matricula.idAsignaturas
-       
+        table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")  
+          tfoot 
+            tr 
+              td.bg-success.bg-gradient
+        div.mb-2(style="overflow-y: auto; max-height: 200px;" class="border border-dark")
+          table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
+            tbody
+              each asig in asignaturas
+                tr
+                  td.bg-success.bg-gradient(style="width: 50%;")= `Cantidad total de alumnos matriculados en:  ${asig.nombre}`
+                  td(class="text-center" style="border-bottom: 1px solid #198754; background-color: #E0F7FA; width: 10%")= matriculados.filter(alumno => alumno.asignaturas.includes(asig.nombre)).length
         table(class="table table-success table-hover mx-auto border border-dark" style="width: 100%")
           tfoot
-            each asig in asignaturas
-              tr
-                td.bg-success.bg-gradient(style="width: 70%; border-right:1px solid black")= `Cantidad total de alumnos matriculados en:  ${asig.nombre}`
-                td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= matriculados.filter(alumno => alumno.asignaturas.includes(asig.nombre)).length
-        table(class="table table-success table-hover mx-auto" style="width: 100%")
-          tfoot
             tr
-                td.bg-success.bg-gradient(class="text-center border-end" style="border-bottom: 1px solid #198754;") Cantidad total de alumnos matriculados
-                td.bg-info.bg-gradient(class="text-center" style="border-bottom: 1px solid #198754;")= matriculados.length
+                td(class="text-center border-end" style="background-color: #26A69A;") Cantidad total de alumnos matriculados
+                td(class="text-center" style="border-bottom: 1px solid #198754; background-color: #E0F7FA;")= matriculados.length
     hr(style="border: 3px solid #198754;")
 
     h2(class="text-center") Maestro detalle: Alumnos matriculados de una asignatura

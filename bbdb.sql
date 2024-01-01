@@ -1,4 +1,5 @@
 
+
 CREATE DATABASE IF NOT EXISTS `gestion`;
 USE `gestion`;
 
@@ -11,7 +12,7 @@ DROP TABLE IF EXISTS `alumno`;
 
 
 
-CREATE TABLE  `alumno`(
+CREATE TABLE IF NOT EXISTS  `alumno`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` VARCHAR(20) NOT NULL,
     `apellido` VARCHAR(20) NOT NULL,
@@ -20,7 +21,7 @@ CREATE TABLE  `alumno`(
 );
 
 
-CREATE TABLE `profesor`(
+CREATE TABLE IF NOT EXISTS `profesor`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` VARCHAR(20) NOT NULL,
     `apellido` VARCHAR(20) NOT NULL,
@@ -45,7 +46,7 @@ INSERT INTO `users`(`username`,`password`)
     VALUES ('john','1234');
 
 
-CREATE TABLE `asignatura`(
+CREATE TABLE IF NOT EXISTS `asignatura`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` VARCHAR(60) NOT NULL,
     `curso` VARCHAR(20) NOT NULL,
@@ -53,7 +54,7 @@ CREATE TABLE `asignatura`(
 );
 
 
-CREATE TABLE `asignatura_alumno`(
+CREATE TABLE IF NOT EXISTS `asignatura_alumno`(
     `asignatura` INT,
     `alumno` INT,
     PRIMARY KEY(asignatura,alumno),
@@ -62,7 +63,7 @@ CREATE TABLE `asignatura_alumno`(
 );
 
 
-CREATE TABLE `asignatura_profesor`(
+CREATE TABLE IF NOT EXISTS `asignatura_profesor`(
     `asignatura` INT,
     `profesor` INT,
     PRIMARY KEY(asignatura,profesor),

@@ -26,6 +26,11 @@ db.connect(err => {
     console.log(`Conexión exitosa a MySQL`);
 });
 
+const executeDatos = require('./db.js');
+
+// Llamar a la función para ejecutar los triggers
+executeDatos();
+
 
 
 //configurar pug
@@ -130,8 +135,10 @@ app.get('/alumnos-add', (req, res) => {
 app.post('/alumnos-add', (req, res) => {
     // Insertar un nuevo alumno en la base de datos
     const { nombre, apellido, email, telefono } = req.body;
-    db.query('INSERT INTO alumno (nombre, apellido, email, telefono) VALUES (?, ?, ?, ?)', 
-    [nombre, apellido, email, telefono], (err, result) => {
+    db.query(`INSERT INTO alumno 
+                (nombre, apellido, email, telefono) 
+                VALUES (?, ?, ?, ?)`, 
+            [nombre, apellido, email, telefono], (err, result) => {
             if (err) res.render("error", {mensaje: err});
             else res.redirect('/alumnos');
         });
@@ -151,8 +158,13 @@ app.post('/alumnos-edit/:id', (req, res) => {
     const alumnoId = req.params.id;
     // Actualizar un alumno por su ID
     const { nombre, apellido, email, telefono } = req.body;
-    db.query('UPDATE alumno SET nombre = ?, apellido = ?, email = ?, telefono = ?  WHERE id = ?',
-        [nombre, apellido, email, telefono, alumnoId], (err, result) => {
+    db.query(`UPDATE alumno SET 
+                nombre = ?, 
+                apellido = ?, 
+                email = ?, 
+                telefono = ?  
+                WHERE id = ?`,
+            [nombre, apellido, email, telefono, alumnoId], (err, result) => {
     if (err)
         res.render("error", {mensaje: err});
     else
@@ -205,7 +217,10 @@ app.get('/asignaturas-add', (req, res)=> {
 app.post('/asignaturas-add', (req, res)=> {
     // Insertar un nuevo alumno en la base de datos
     const { nombre, ciclo, curso } = req.body;
-    db.query('INSERT INTO asignatura (nombre, ciclo, curso) VALUES (?, ?,?)', [nombre, ciclo, curso], (err, result) => {
+    db.query(`INSERT INTO asignatura 
+                (nombre, ciclo, curso) 
+                VALUES (?, ?,?)`, 
+            [nombre, ciclo, curso], (err, result) => {
     if (err) throw err;
         res.redirect('/asignaturas');
     });
@@ -214,7 +229,9 @@ app.post('/asignaturas-add', (req, res)=> {
 
 app.get('/asignaturas-edit/:id', (req, res)=> {
     const asignaturaId = req.params.id;
-    db.query('SELECT * FROM asignatura WHERE id = ?', [asignaturaId], (err, result) =>{
+    db.query(`SELECT * FROM asignatura 
+                WHERE id = ?`, 
+            [asignaturaId], (err, result) =>{
         if (err)
             res.render("error", {mensaje: err});
         else
@@ -227,7 +244,12 @@ app.post('/asignaturas-edit/:id', (req, res) => {
     const asignaturaId = req.params.id;
     // Actualizar un asignatura por su ID
     const { nombre, ciclo, curso } = req.body;
-    db.query('UPDATE asignatura SET nombre = ?, ciclo = ?, curso = ? WHERE id = ?', [nombre, ciclo, curso, asignaturaId], (err, result)=> {
+    db.query(`UPDATE asignatura 
+                SET nombre = ?, 
+                ciclo = ?, 
+                curso = ? 
+                WHERE id = ?`,
+            [nombre, ciclo, curso, asignaturaId], (err, result)=> {
         if (err)
             res.render("error", {mensaje: err});
         else
@@ -239,7 +261,9 @@ app.post('/asignaturas-edit/:id', (req, res) => {
 app.get('/asignaturas-delete/:id', (req, res) => {
     const asignaturaId = req.params.id;
     // Obtener y mostrar el asignatura a eliminar
-    db.query('SELECT * FROM asignatura WHERE id = ?', [asignaturaId], (err, result) => {
+    db.query(`SELECT * FROM asignatura 
+                WHERE id = ?`, 
+            [asignaturaId], (err, result) => {
         if (err)
             res.render("error", {mensaje: err});
         else
@@ -297,14 +321,17 @@ app.post('/matricular', async (req, res) => {
     const { alumno, asignatura } = req.body;
 
     // Verificar si la matricula ya existe
-    const queryExistencia = 'SELECT * FROM asignatura_alumno WHERE alumno = ? AND asignatura = ?';
+    const queryExistencia = `
+    SELECT * FROM asignatura_alumno 
+    WHERE alumno = ? AND asignatura = ?`;
 
     try {
         const resultExistencia = await queryAsync(queryExistencia, [alumno, asignatura]);
-
         if (resultExistencia.length === 0) {
             // Matricular al alumno en la asignatura
-            const queryMatricular = 'INSERT INTO asignatura_alumno (alumno, asignatura) VALUES (?, ?)';
+            const queryMatricular = `
+            INSERT INTO asignatura_alumno 
+            (alumno, asignatura) VALUES (?, ?)`;
             
             try {
                 await queryAsync(queryMatricular, [alumno, asignatura]);

@@ -1,10 +1,9 @@
 
-DELIMITER //
 
-DROP TRIGGER before_insert_asignatura_alumno;//
-DROP TRIGGER before_update_asignatura_alumno;//
-DROP TRIGGER before_insert_asignatura_profesor;//
-DROP TRIGGER before_update_asignatura_profesor;//
+DROP TRIGGER IF EXISTS before_insert_asignatura_alumno;//
+DROP TRIGGER IF EXISTS before_update_asignatura_alumno;//
+DROP TRIGGER IF EXISTS before_insert_asignatura_profesor;//
+DROP TRIGGER IF EXISTS before_update_asignatura_profesor;//
 
 CREATE TRIGGER before_insert_asignatura_alumno
 BEFORE INSERT ON asignatura_alumno
@@ -18,8 +17,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede asignar más de 32 alumnos a la asignatura.';
     END IF;
-END; 
-//
+END;//
 
 CREATE TRIGGER before_update_asignatura_alumno
 BEFORE UPDATE ON asignatura_alumno
@@ -33,8 +31,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede asignar más de 32 alumnos a la asignatura.';
     END IF;
-END; 
-//
+END;//
 
 
 CREATE TRIGGER before_insert_asignatura_profesor
@@ -49,8 +46,8 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se pueden asignar más de dos profesores a la asignatura.';
     END IF;
-END;
-//
+END;//
+
 
 
 CREATE TRIGGER before_update_asignatura_profesor
@@ -65,8 +62,5 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se pueden asignar más de dos profesores a la asignatura.';
     END IF;
-END;
-//
+END;//
 
-
-DELIMITER ;
