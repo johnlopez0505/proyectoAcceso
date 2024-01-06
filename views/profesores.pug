@@ -1,33 +1,95 @@
 extends layout 
 
 block content
-    div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
-        h1(class="text-center") Lista de Profesores
-        table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
-            thead  
-                tr 
-                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
-                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") ID
-                    th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
-                    th.bg-success.bg-gradient(class="text-center border-end " style="width: 300px;") Email
-                    th.bg-success.bg-gradient(class="text-center") Acciones
-        div(style="overflow-y: auto; max-height: 250px;")
-            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
-                tbody 
-                    each profesor, index in profesores 
-                        tr
-                            td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
-                            td.border-end(style="width: 30px;" class="align-middle text-center")= profesor.id
-                            td.border-end(style="width: 250px;" class="align-middle")= `${profesor.nombre} ${profesor.apellido}` 
-                            td.border-end(style="width: 300px;" class="align-middle")= profesor.email
-                            td(class="text-center")
-                                a(href=`/profesores-edit/${profesor.id}` class="btn btn-outline-success") Editar 
-                                a.ms-1(href=`/profesores-delete/${profesor.id}` class="btn btn-outline-success") Eliminar
-        table(class="table table-success table-hover mx-auto" style="width: 100%") 
-            tfoot
-                td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de profesores
-                td(class="text-center" style="background-color: #E0F7FA;")= profesores.length
-    div(class="d-grid gap-2 col-2 mx-auto") 
-        p(class="mx-auto") 
-            a(href='/profesores-add' class="btn btn-outline-success") Agregar Nuevo Profesor
-            br
+    if user && rol === "administrativo"
+        div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+            h1(class="text-center") Lista de Profesores
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+                thead  
+                    tr 
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") ID
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
+                        th.bg-success.bg-gradient(class="text-center border-end " style="width: 300px;") Email
+                        th.bg-success.bg-gradient(class="text-center") Acciones
+            div(style="overflow-y: auto; max-height: 250px;")
+                table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
+                    tbody 
+                        each profesor, index in profesores 
+                            tr
+                                td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                                td.border-end(style="width: 30px;" class="align-middle text-center")= profesor.id
+                                td.border-end(style="width: 250px;" class="align-middle")= `${profesor.nombre} ${profesor.apellido}` 
+                                td.border-end(style="width: 300px;" class="align-middle")= profesor.email
+                                td(class="text-center")
+                                    a(href=`/profesores-edit/${profesor.id}` class="btn btn-outline-success") Editar 
+                                    a.ms-1(href=`/profesores-delete/${profesor.id}` class="btn btn-outline-success") Eliminar
+            table(class="table table-success table-hover mx-auto" style="width: 100%") 
+                tfoot
+                    td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de profesores
+                    td(class="text-center" style="background-color: #E0F7FA;")= profesores.length
+        div(class="d-grid gap-2 col-2 mx-auto") 
+            p(class="mx-auto") 
+                a(href='/profesores-add' class="btn btn-outline-success") Agregar Nuevo Profesor
+                br
+    
+    if user && rol === "alumno"
+        div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+            h1(class="text-center") Lista de Profesores de las asignaturas
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+                thead  
+                    tr 
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
+                        th.bg-success.bg-gradient(class="text-center border-end " style="width: 300px;") Email
+                        th.bg-success.bg-gradient(class="text-center border-end " style="width: 100px;") Ciclo
+                        th.bg-success.bg-gradient(class="text-center" style="width: 300px;") Asignaturas
+            div(style="overflow-y: auto; max-height: 250px;")
+                table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
+                    tbody 
+                        each profesor, index in profesores 
+                            tr
+                                td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                                td.border-end(style="width: 250px;" class="align-middle")= `${profesor.nombre} ${profesor.apellido}` 
+                                td.border-end(style="width: 300px;" class="align-middle")= profesor.email
+                                td.border-end(style="width: 100px;" class="align-middle")= profesor.ciclo
+                                td(style="width: 300px;")= profesor.asignaturas
+                                   
+            table(class="table table-success table-hover mx-auto" style="width: 100%") 
+                tfoot
+                    td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de profesores
+                    td(class="text-center" style="background-color: #E0F7FA;")= profesores.length
+
+            div(class="container" style="width: 75%; ; margin-top: 20px;" class="mx-auto text-center" )
+                if profesores.length === 0
+                    p Aun no han asignado un profesor a tus asignatura.
+                br
+
+
+    if user && rol === "profesor"
+        div.container(class="mx-auto" style="width: 75%; margin-top: 30px;")
+            h1(class="text-center") Lista de Profesores del Ciclo
+            table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%") 
+                thead  
+                    tr 
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 30px;") #
+                        th.bg-success.bg-gradient(class="text-center border-end" style="width: 250px;") Nombre
+                        th.bg-success.bg-gradient(class="text-center border-end " style="width: 300px;") Email
+                        th.bg-success.bg-gradient(class="text-center border-end " style="width: 100px;") Ciclo
+                        th.bg-success.bg-gradient(class="text-center" style="width: 300px;") Asignaturas
+            div(style="overflow-y: auto; max-height: 250px;")
+                table.mb-0(class="table table-success table-hover mx-auto" style="width: 100%")
+                    tbody 
+                        each profesor, index in profesores 
+                            tr
+                                td.border-end.bg-success.bg-gradient(style="width: 30px;" class="align-middle text-center")= index+1
+                                td.border-end(style="width: 250px;" class="align-middle")= `${profesor.nombre} ${profesor.apellido}` 
+                                td.border-end(style="width: 300px;" class="align-middle")= profesor.email
+                                td.border-end(style="width: 100px;" class="align-middle")= profesor.ciclo
+                                td(style="width: 300px;")= profesor.asignaturas
+                                   
+            table(class="table table-success table-hover mx-auto" style="width: 100%") 
+                tfoot
+                    td.bg-success.bg-gradient(class="text-center border-end") Cantidad total de profesores
+                    td(class="text-center" style="background-color: #E0F7FA;")= profesores.length
+       

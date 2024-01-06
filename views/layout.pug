@@ -8,7 +8,7 @@ html
             ul(class="nav justify-content-center" style="color: black; width: 100%;")
                 li.nav-item(style="width: 14.286%;")
                     a.nav-link(href = "/" class="text-dark btn btn-warning" data-page="/") Inicio
-                if user
+                if user && rol === "administrativo"
                     li.nav-item(style="width: 14.286%;") 
                         a.nav-link(href = "/alumnos" class="text-dark" 
                             class="btn btn-warning" data-page="/alumnos") Alumnos
@@ -24,6 +24,32 @@ html
                     li.nav-item(style="width: 14.286%;")
                         a.nav-link(href = "/asignar-profesores" class="text-dark" 
                             class="btn btn-warning" data-page="/asignar-profesores") Asignar Profesores
+                    li.nav-item(style="width: 14.286%;")
+                        a.nav-link(href = "/logout" class="text-dark" 
+                            class="btn btn-warning" data-page="/logout") Cerrar sesión
+                else if user && rol === "alumno"
+                    li.nav-item(style="width: 14.286%;") 
+                        a.nav-link(href = "/alumnos" class="text-dark" 
+                            class="btn btn-warning" data-page="/alumnos") Alumnos
+                    li.nav-item(style="width: 14.286%;")
+                        a.nav-link(href = "/profesores" class="text-dark" 
+                            class="btn btn-warning" data-page="/profesores") Profesores
+                    li.nav-item(style="width: 14.286%;") 
+                        a.nav-link(href = "/asignaturas" class="text-dark" 
+                            class="btn btn-warning" data-page="/asignaturas") Asignaturas
+                    li.nav-item(style="width: 14.286%;")
+                        a.nav-link(href = "/logout" class="text-dark" 
+                            class="btn btn-warning" data-page="/logout") Cerrar sesión
+                else if user && rol === "profesor"
+                    li.nav-item(style="width: 14.286%;") 
+                        a.nav-link(href = "/alumnos" class="text-dark" 
+                            class="btn btn-warning" data-page="/alumnos") Alumnos
+                    li.nav-item(style="width: 14.286%;")
+                        a.nav-link(href = "/profesores" class="text-dark" 
+                            class="btn btn-warning" data-page="/profesores") Profesores
+                    li.nav-item(style="width: 14.286%;") 
+                        a.nav-link(href = "/asignaturas" class="text-dark" 
+                            class="btn btn-warning" data-page="/asignaturas") Asignaturas
                     li.nav-item(style="width: 14.286%;")
                         a.nav-link(href = "/logout" class="text-dark" 
                             class="btn btn-warning" data-page="/logout") Cerrar sesión
