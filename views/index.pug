@@ -2,7 +2,7 @@ extends layout
 
 block content
     div.container
-        h1(class="text-center") Bienvenido, #{user || 'Invitado'}
+        h1(class="text-center") Bienvenido, #{`Usuario: ${user}      rol: ${rol}` || 'Invitado'}
         if user 
             p(class="d-grid gap-2 col-2 mx-auto") 
                 a(href = "/logout" class="btn btn-outline-success") Cerrar sesión 

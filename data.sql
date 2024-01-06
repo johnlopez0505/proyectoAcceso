@@ -68,13 +68,61 @@ INSERT INTO profesor (nombre, apellido, email) VALUES
 
 
 INSERT INTO asignatura (nombre, curso, ciclo) VALUES
-('Matemáticas I', '1º ESO', 'Ciencias'),
-('Lengua Española', '1º ESO', 'Letras'),
-('Ciencias Naturales', '2º ESO', 'Ciencias'),
-('Historia', '2º ESO', 'Humanidades'),
-('Inglés', '3º ESO', 'Idiomas'),
-('Química', '3º ESO', 'Ciencias'),
-('Educación Física', '4º ESO', 'Deportes'),
-('Geografía', '4º ESO', 'Humanidades'),
-('Programación', '1º Bachillerato', 'Tecnología'),
-('Literatura Universal', '1º Bachillerato', 'Letras');
+('Procesos', '2023/2024', '2º DAM'),
+('Multimedia', '2023/2024', '2º DAM'),
+('Acceso a Datos', '2023/2024', '2º DAM'),
+('Empresa', '2023/2024', '2º DAM'),
+('Libre Configuración', '2023/2024', '2º DAM'),
+('SGE', '2023/2024', '2º DAM'),
+('Interface', '2023/2024', '2º DAM'),
+('Programación', '2º Dam', '2º DAM');
+
+
+INSERT INTO `users`(`username`,`password`)
+    VALUES ('john','1234');
+
+INSERT INTO `users`(`username`,`password`,`rol`,`alumno`)
+    VALUES ('juan','1234','alumno',1);
+
+INSERT INTO `users`(`username`,`password`,`rol`,`alumno`)
+    VALUES ('pedro','1234','alumno',9);
+
+INSERT INTO `users`(`username`,`password`,`rol`,`alumno`)
+    VALUES ('pablo','1234','alumno',48);
+
+INSERT INTO `users`(`username`,`password`,`rol`,`profesor`)
+    VALUES ('alejandro','1234','profesor',1);
+
+INSERT INTO `users`(`username`,`password`,`rol`,`profesor`)
+    VALUES ('diana','1234','profesor',4);
+
+INSERT INTO `users`(`username`,`password`,`rol`,`profesor`)
+    VALUES ('gabriel','1234','profesor',7);
+
+
+
+INSERT INTO `asignatura_alumno`(`asignatura`,`alumno`)
+    VALUES (1,1);
+
+INSERT INTO `asignatura_alumno`(`asignatura`,`alumno`)
+    VALUES (2,20);
+
+INSERT INTO `asignatura_alumno`(`asignatura`,`alumno`)
+    VALUES (1,18);
+
+INSERT INTO `asignatura_alumno`(`asignatura`,`alumno`)
+    VALUES (8,48);
+
+
+
+INSERT INTO `asignatura_profesor`(`asignatura`,`profesor`)
+    VALUES (1,4);
+
+INSERT INTO `asignatura_profesor`(`asignatura`,`profesor`)
+    VALUES (2,4);
+
+INSERT INTO `asignatura_profesor`(`asignatura`,`profesor`)
+    VALUES (3,1);
+
+INSERT INTO `asignatura_profesor`(`asignatura`,`profesor`)
+    VALUES (1,2);

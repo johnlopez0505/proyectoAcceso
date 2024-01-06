@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS  `alumno`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` VARCHAR(20) NOT NULL,
     `apellido` VARCHAR(20) NOT NULL,
-    `email` VARCHAR(30) NOT NULL,
+    `email` VARCHAR(30) UNIQUE NOT NULL,
     `telefono` VARCHAR(15)
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `profesor`(
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nombre` VARCHAR(20) NOT NULL,
     `apellido` VARCHAR(20) NOT NULL,
-    `email` VARCHAR(30) NOT null
+    `email` VARCHAR(30) UNIQUE NOT NULL
 );
 
 
@@ -40,10 +40,7 @@ FOREIGN KEY (profesor) REFERENCES profesor (id),
 FOREIGN KEY (alumno) REFERENCES alumno (id)
 );
 
-    
 
-INSERT INTO `users`(`username`,`password`)
-    VALUES ('john','1234');
 
 
 CREATE TABLE IF NOT EXISTS `asignatura`(
